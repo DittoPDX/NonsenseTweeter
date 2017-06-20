@@ -1,9 +1,12 @@
-[
-  {
-    "text": "Sitting in web dev... This class is so awesome!",
-    "author": "CSMajor2017"
-  },
-  {
+{
+  "Random":{
+    "name": "Random-Twits",
+    "twits": [
+      {
+        "text": "Sitting in web dev... This class is so awesome!",
+        "author": "CSMajor2017"
+        },
+        {
     "text": "Anyone watch the baseball game last night?  The Beavs are still in 1st place!",
     "author": "BeaverBeliever"
   },
@@ -32,3 +35,14 @@
     "author": "TheIRS"
   }
 ]
+},
+  "Game":{
+    "name": "Game-Twits",
+    "twits":[
+      {
+        "text": "Anybody play smash bros?",
+        "author": "Sammysamx20"
+      }
+    ]
+  }
+}
