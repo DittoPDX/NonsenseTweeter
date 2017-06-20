@@ -126,7 +126,7 @@ function insertNewTwit() {
 
     }
 
-    closeAddPhotoModal();
+    closeCreateTwitModal();
 
   } else {
 
