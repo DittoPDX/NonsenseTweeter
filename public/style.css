@@ -287,3 +287,16 @@ a:focus {
   font-size: 36px;
   font-weight: 400;
 }
+.greeting  {
+  margin-top: 50px;
+  text-align: center;
+  margin: 10px 0;
+  font-size: 96px;
+  font-weight: 100;
+}
+
+.command  {
+  margin: 10px 0;
+  font-size: 36px;
+  font-weight: 400;
+}
