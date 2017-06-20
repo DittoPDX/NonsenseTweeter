@@ -76,35 +76,66 @@ function generateNewTwitElem(twitText, twitAuthor) {
   return twitTemplate(twitData);
 
 }
-
+function gettwitid() {
+  var pathComponents = window.location.pathname.split('/');
+  if (pathComponents[0] !== '' && pathComponents[1] !== 'twits') {
+    return null;
+  }
+  return pathComponents[2];
+}
 /*
  * This function takes user input values from the "create twit" modal,
  * generates a new twit using them, and inserts that twit into the document.
  */
 function insertNewTwit() {
 
-  var twitText = document.getElementById('twit-text-input').value;
-  var twitAttribution = document.getElementById('twit-attribution-input').value;
+  var twitText = document.getElementById('twit-text-input').value || '';
+  var twitAttribution = document.getElementById('twit-attribution-input').value || '';
 
   /*
    * Only generate the new twit if the user supplied values for both the twit
    * text and the twit attribution.  Give them an alert if they didn't.
    */
-  if (twitText && twitAttribution) {
+   if (twitText && twitAttribution) {
 
-      var newTwitElem = generateNewTwitElem(twitText, twitAttribution);
-      var twitContainer = document.querySelector('.twit-container');
-      twitContainer.insertAdjacentHTML('beforeend', newTwitElem);
-      allTwitElems.push(newTwitElem);
+    var twitID= gettwitid();
+    if (twitID) {
+      console.log("== twit ID:", twitID);
 
-      closeCreateTwitModal();
+      storetwit(twitID, twitText, twitAttribution, function (err) {
+
+        if (err) {
+          alert("Unable to save twit. Got this error:\n\n" + err);
+      } else {
+
+          var twitTemplate = Handlebars.templates.twit;
+          var templateArgs = {
+            text: twitText,
+            author: twitAttribution
+          };
+
+          var twitHTML = twitTemplate(templateArgs);
+          // console.log(photoCardHTML);
+
+          var twitContainer = document.querySelector('.twit-container');
+          twitContainer.insertAdjacentHTML('beforeend', twitHTML);
+
+       }
+
+      });
+
+    }
+
+    closeCreateTwitModal();
 
   } else {
 
-    alert('You must specify both the text and the author of the twit!');
+    alert('You must specify a value for the "text" and "author" field.');
 
   }
+
 }
+
 
 /*
  * Perform a search over over all the twits based on the search query the user
@@ -134,7 +165,29 @@ function doTwitSearch() {
   });
 
 }
+function storetwit(twitID,text,author, callback) {
 
+  var postURL = "/twits/" + twitID +"/addtwit";
+
+  var postRequest = new XMLHttpRequest();
+  postRequest.open('POST', postURL);
+  postRequest.setRequestHeader('Content-Type', 'application/json');
+
+  postRequest.addEventListener('load', function (event) {
+    var error;
+    if (event.target.status !== 200) {
+      error = event.target.response;
+    }
+    callback(error);
+  });
+
+  var postBody = {
+    text: text,
+    author: author
+  };
+  postRequest.send(JSON.stringify(postBody));
+
+}
 
 /*
  * Wait until the DOM content is loaded, and then hook up UI interactions, etc.
